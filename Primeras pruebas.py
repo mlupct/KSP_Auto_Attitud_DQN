@@ -27,11 +27,15 @@ conn = connect_server()
 vessel = conn.space_center.active_vessel
 
 orbital_frame = vessel.orbital_reference_frame
+vessel_frame = vessel.surface_reference_frame
 #Leer en KSP https://krpc.github.io/krpc/tutorials/reference-frames.html
 
 
 while True:
-    orbital = vessel.flight(orbital_frame)
-
-    print(orbital)
-
+    telemetria = vessel.flight(orbital_frame)
+    progrado = telemetria.direction[0]
+    print(telemetria.direction)
+    telemetria_nave = vessel.flight(vessel_frame)
+    rotation = telemetria_nave.rotation
+    #print(rotation)
+    sleep(1)
