@@ -23,6 +23,15 @@ def connect_server():
 
     return conn
 
+conn = connect_server()
+vessel = conn.space_center.active_vessel
 
-connect_server()
+orbital_frame = vessel.orbital_reference_frame
+#Leer en KSP https://krpc.github.io/krpc/tutorials/reference-frames.html
+
+
+while True:
+    orbital = vessel.flight(orbital_frame)
+
+    print(orbital)
 
