@@ -1,9 +1,12 @@
 import krpc
 from time import sleep
 
+# Función para conectar al servidor KRPC
 def connect_server():
+    # Intentar conectarse al servidor de forma continua
     while True:
         try:
+            # Establecer conexión con el servidor KRPC
             conn = krpc.connect(
                 name='Default Server',
                 address='127.0.0.1',
@@ -12,6 +15,7 @@ def connect_server():
             break
 
         except ConnectionRefusedError:
+            # Si no se puede conectar, manejar el error y preguntar si se desea reintentar
             print("No se puede connectar con el servidor.")
             reintentar = ""
             while reintentar.upper() not in ("S", "N"):
@@ -23,19 +27,27 @@ def connect_server():
 
     return conn
 
+# Conectar al servidor KRPC
 conn = connect_server()
+# Obtener la nave activa
 vessel = conn.space_center.active_vessel
 
+# Establecer marcos de referencia orbital y de superficie
 orbital_frame = vessel.orbital_reference_frame
 vessel_frame = vessel.surface_reference_frame
-#Leer en KSP https://krpc.github.io/krpc/tutorials/reference-frames.html
 
-
+# Bucle infinito para leer y mostrar la dirección del vector orbital redondeada a centésimas
 while True:
-    telemetria = vessel.flight(orbital_frame)
-    progrado = telemetria.direction[0]
-    print(telemetria.direction)
-    telemetria_nave = vessel.flight(vessel_frame)
-    rotation = telemetria_nave.rotation
-    #print(rotation)
+    # Obtener información de telemetría de la nave en el marco de referencia orbital
+    orbital_telemetry = vessel.flight(orbital_frame)
+    # Obtener la dirección del vector orbital
+    orbital_direction_vector = orbital_telemetry.direction
+
+    # Redondear cada componente del vector orbital a centésimas
+    orbital_direction_vector = tuple(map(lambda x: round(x, 2), orbital_direction_vector))
+
+    # Imprimir el vector orbital redondeado
+    print(orbital_direction_vector)
+
+    # Pausar por un segundo antes de actualizar los datos
     sleep(1)
