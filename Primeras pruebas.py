@@ -1,5 +1,7 @@
 import krpc
 from time import sleep
+import math
+
 
 # Función para conectar al servidor KRPC
 def connect_server():
@@ -45,9 +47,14 @@ while True:
 
     # Redondear cada componente del vector orbital a centésimas
     orbital_direction_vector = tuple(map(lambda x: round(x, 2), orbital_direction_vector))
+    odv = orbital_direction_vector
 
     # Imprimir el vector orbital redondeado
     print(orbital_direction_vector)
+
+    posible_funcion = 1/(1+abs(odv[0])) + odv[1]+ 1/(1+abs(odv[2]))
+    print(posible_funcion)
+
 
     # Pausar por un segundo antes de actualizar los datos
     sleep(1)
